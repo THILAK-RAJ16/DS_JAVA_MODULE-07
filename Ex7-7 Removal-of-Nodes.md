@@ -1,68 +1,56 @@
 # Ex7 Removal of Nodes with a Specific Value from a Linked List
-## DATE:
+## DATE: 29/9/2025
 ## AIM:
 To write a java  program that removes all nodes from a linked list whose value matches a given integer (val) and returns the new head of the modified linked list.
 
 ## Algorithm
-```text
-1. Start
-2. Read the number of nodes n
-3. Initialize head as null
-4. Repeat n times:
-   a) Read a data value
-   b) Create a new node with this data
-   c) Insert the new node at the end of the linked list
-5. Read the integer val (value to be removed)
-6. While head is not null and head.data equals val:
-   a) Set head = head.next
-7. Set current = head
-8. While current is not null and current.next is not null:
-   a) If current.next.data equals val:
-        i) Set current.next = current.next.next
-      Else:
-        ii) Set current = current.next
-9. Traverse the list starting from head and print each node’s data
-10. End
-```
+1.Move head forward until it reaches a node whose value is not equal to val.
+
+2.If the list becomes empty, return null.
+
+3.Start from the new head and traverse the list using a pointer (current).
+
+4.If current.next contains val, skip that node
+
+5.Otherwise, move to the next node. Continue until the end, then return the modified head.  
 
 ## Program:
-
+```
+/*
 program that removes all nodes from a linked list whose value matches a given integer (val) and returns the new head of the modified linked list.
-```java
-import java.util.Scanner;
+Developed by: THILAK RAJ . P
+RegisterNumber:  212224040353
+*/
 
-public class Main {
-    private static class Node {
+class RemoveNodes {
+    static class Node {
         int data;
         Node next;
-        Node(int d) {
-            data = d;
-            next = null;
-        }
-    }
 
-    static Node insertEnd(Node head, int data) {
-        Node newNode = new Node(data);
-        if (head == null)
-            return newNode;
-        Node temp = head;
-        while (temp.next != null)
-            temp = temp.next;
-        temp.next = newNode;
-        return head;
+        Node(int data) {
+            this.data = data;
+            this.next = null;
+        }
     }
 
     static Node removeElements(Node head, int val) {
-        while (head != null && head.data == val)
+        
+        while (head != null && head.data == val) {
             head = head.next;
-        Node current = head;
-        while (current != null && current.next != null) {
-            if (current.next.data == val)
-                current.next = current.next.next;
-            else
-                current = current.next;
         }
-        return head;
+
+        if (head == null) return null;
+
+        Node current = head;
+        while (current.next != null) {
+            if (current.next.data == val) {
+                current.next = current.next.next; // Skip node
+            } else {
+                current = current.next; // Move ahead
+            }
+        }
+
+        return head; // Return new head
     }
 
     static void display(Node head) {
@@ -75,25 +63,30 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int n = sc.nextInt();
-        Node head = null;
-        for (int i = 0; i < n; i++)
-            head = insertEnd(head, sc.nextInt());
-        int val = sc.nextInt();
-        head = removeElements(head, val);
+
+        Node head = new Node(1);
+        head.next = new Node(2);
+        head.next.next = new Node(6);
+        head.next.next.next = new Node(3);
+        head.next.next.next.next = new Node(6);
+        head.next.next.next.next.next = new Node(4);
+
+        System.out.println("Original Linked List:");
         display(head);
-        sc.close();
+
+        int val = 6;
+
+        head = removeElements(head, val);
+
+        System.out.println("Linked List after removing value " + val + ":");
+        display(head);
     }
 }
 ```
-Developed by: THILAK RAJ . P  
-RegisterNumber:  212224040353
-
 
 ## Output:
+<img width="577" height="178" alt="514999513-8b491571-ae80-4bdb-9d3d-3aa8c413a212" src="https://github.com/user-attachments/assets/b6b15d26-5ddc-4d7f-b964-1f6bf3b559cd" />
 
-<img width="452" height="387" alt="image" src="https://github.com/user-attachments/assets/c7f764af-c772-4c77-81ed-9d861801c080" />
 
 
 ## Result:
