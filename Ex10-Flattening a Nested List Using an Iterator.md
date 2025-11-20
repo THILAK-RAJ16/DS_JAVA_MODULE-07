@@ -1,64 +1,115 @@
 # Flattening a Nested List Using an Iterator
-## DATE:
+## DATE: 29/9/2025
 ## AIM:
 To design and implement a class NestedIterator that flattens a nested list of integers such that all integers can be accessed sequentially using an iterator interface (next() and hasNext()).
 ## Algorithm
-```text
-1. Start
-2. Create an empty list called result
-3. Call the function flattenList(nestedList)
+1. Start the program.
 
-4. In the function flattenList(nestedList):
-   4.1 For each element in nestedList:
-       a) If the element is an Integer:
-              i) Add the element to result
-       b) Else if the element is a List:
-              i) Recursively call flattenList on this element (cast as List<Object>)
-              ii) Add all returned integers into result
+2. Define an interface-like class NestedInteger that can represent either a single integer or a nested list.
 
-5. After flattenList finishes, result contains all integers from the nested list in order
-6. Print or use the list result
-7. End
-```
+3. Use a stack or recursion to flatten all integers from the nested list into a single list.
+
+4. Store the flattened list and maintain an index to track the current element.
+
+5. Implement next() to return the next integer and hasNext() to check if more integers exist.
+
+6. Test the iterator with a sample nested list.
+
+7. Stop the program.
+  
 
 ## Program:
+```
+/*
 Program to find Flattening a Nested List Using an Iterator
-```java
+Developed by: Dhanusya K
+RegisterNumber:  212223230043
+*/
+
 import java.util.*;
 
-public class FlattenNestedListSimple {
-    public static List<Integer> flattenList(List<Object> nestedList) {
-        List<Integer> result = new ArrayList<>();
-        for (Object element : nestedList) {
-            if (element instanceof Integer) {
-                result.add((Integer) element);
-            } else if (element instanceof List) {
-                result.addAll(flattenList((List<Object>) element));
-            }
-        }
-        return result;
+interface NestedInteger {
+    boolean isInteger();
+    Integer getInteger();
+    List<NestedInteger> getList();
+}
+
+class NI implements NestedInteger {
+    private Integer value;
+    private List<NestedInteger> list;
+
+    NI(Integer value) {
+        this.value = value;
+        this.list = null;
     }
 
-    public static void main(String[] args) {
-        List<Object> nestedList = new ArrayList<>();
-        nestedList.add(1);
-        nestedList.add(Arrays.asList(2, Arrays.asList(3, 4), 5));
+    NI(List<NestedInteger> list) {
+        this.list = list;
+        this.value = null;
+    }
 
-        System.out.println("Original Nested List: " + nestedList);
+    public boolean isInteger() {
+        return value != null;
+    }
 
-        List<Integer> flattened = flattenList(nestedList);
+    public Integer getInteger() {
+        return value;
+    }
 
-        System.out.println("Flattened List: " + flattened);
+    public List<NestedInteger> getList() {
+        return list;
     }
 }
-```
-Developed by: THILAK RAJ . P  
-RegisterNumber:  212224040353
 
+class NestedIterator implements Iterator<Integer> {
+    private List<Integer> flattenedList = new ArrayList<>();
+    private int index = 0;
+
+    public NestedIterator(List<NestedInteger> nestedList) {
+        flatten(nestedList);
+    }
+
+    private void flatten(List<NestedInteger> nestedList) {
+        for (NestedInteger ni : nestedList) {
+            if (ni.isInteger()) {
+                flattenedList.add(ni.getInteger());
+            } else {
+                flatten(ni.getList());
+            }
+        }
+    }
+
+    public Integer next() {
+        return flattenedList.get(index++);
+    }
+
+    public boolean hasNext() {
+        return index < flattenedList.size();
+    }
+}
+
+public class FlattenNestedList {
+    public static void main(String[] args) {
+        List<NestedInteger> nestedList = new ArrayList<>();
+        nestedList.add(new NI(1));
+        List<NestedInteger> innerList = new ArrayList<>();
+        innerList.add(new NI(2));
+        innerList.add(new NI(3));
+        nestedList.add(new NI(innerList));
+        nestedList.add(new NI(4));
+
+        NestedIterator i = new NestedIterator(nestedList);
+        System.out.print("Flattened list: ");
+        while (i.hasNext()) {
+            System.out.print(i.next() + " ");
+        }
+    }
+} 
+```
 
 ## Output:
 
-<img width="442" height="108" alt="image" src="https://github.com/user-attachments/assets/7079b91d-bbe5-4c37-931c-4a8ce8fa2698" />
+<img width="865" height="192" alt="image" src="https://github.com/user-attachments/assets/87451294-2175-402f-b411-34263df62a20" />
 
 
 ## Result:
